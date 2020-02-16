@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -73,6 +75,27 @@ public class Frame extends JFrame {
             }
         });
         menu.add(buttonB);
+        
+        
+        JButton Server = new JButton("Starte Server");
+        Server.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	// Run a java app in a separate system process
+            	Process proc = null;
+				try {
+					proc = Runtime.getRuntime().exec("java -jar Server.jar");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            	// Then retreive the process output
+            	InputStream in = proc.getInputStream();
+            	InputStream err = proc.getErrorStream();
+                repaint();
+            }
+        });
+        menu.add(Server);
         
         JButton buttonZ = new JButton("Überschrift");
         buttonZ.addActionListener(new ActionListener() {
