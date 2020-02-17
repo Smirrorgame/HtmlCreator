@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,13 +22,14 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import info.hofOnesimus.main.Main;
 
-public class Frame extends JFrame {
+public class Frame extends JFrame implements WindowListener{
     private JTextArea inputText;
     private JTextArea actualHtml;
     
@@ -34,15 +37,17 @@ public class Frame extends JFrame {
     private String html = "";
     private ArrayList<String> undos = new ArrayList<>();
     private File selectedFile = new File(Main.STD_FILE);
+    private Process proc = null;
     
     public Frame(Main m) {
-    	this();
+    	this();    	
     	this.m = m;
-    }
-    
+    }    
     
     public Frame() throws HeadlessException {
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+    	addWindowListener(this);
+    	//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.setTitle("Html Creator: "+ selectedFile.getName());
         this.setMinimumSize(new Dimension(Main.STD_SIZE,600));
@@ -82,7 +87,6 @@ public class Frame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
             	// Run a java app in a separate system process
-            	Process proc = null;
 				try {
 					proc = Runtime.getRuntime().exec("java -jar Server.jar");
 				} catch (IOException e1) {
@@ -90,8 +94,8 @@ public class Frame extends JFrame {
 					e1.printStackTrace();
 				}
             	// Then retreive the process output
-            	InputStream in = proc.getInputStream();
-            	InputStream err = proc.getErrorStream();
+//            	InputStream in = proc.getInputStream();
+//            	InputStream err = proc.getErrorStream();
                 repaint();
             }
         });
@@ -234,5 +238,42 @@ public class Frame extends JFrame {
 
         this.setVisible(true);
     }
+    
+    
+    
+    /* Windowlistener Methods */   
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowClosed(WindowEvent e) {
+	}
+	@Override
+	public void windowClosing(WindowEvent e) {
+		proc.destroy();
+		System.exit(EXIT_ON_CLOSE);
+	}
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
